@@ -323,15 +323,15 @@ async function sendToFfmpegRenderer(finalVideoScript) {
 
     console.log("Sending script to rendering engine...", finalVideoScript);
 
-        try {
+            try {
         const response = await fetch(SERVER_URL, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'Bypass-Tunnel-Reminder': 'true'
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify(finalVideoScript) 
         });
+
 
 
         const data = await response.json();
