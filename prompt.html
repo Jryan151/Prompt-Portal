@@ -158,9 +158,7 @@
 
     </div>
 
-⁠<button id="testRenderBtn" style="padding: 10px; background: red; color: white; margin: 20px; cursor: pointer;">TEST SERVER RENDER</button>⁠
-
-
+    <button id="testRenderBtn" style="padding: 10px; background: red; color: white; margin: 20px; cursor: pointer;">TEST SERVER RENDER</button>
 
     <!-- UI Logic & State Management -->
     <script>
@@ -313,67 +311,58 @@
             console.log("Saving to Database:", jsonPayload);
             alert("Configuration Saved! Check console to see JSON payload.");
         });
-async function sendToFfmpegRenderer(finalVideoScript) {
-    // We are pointing this directly to your Hetzner server IP and Port 3000
- ⁠const SERVER_URL = 'https://occurs-ccd-notification-particle.trycloudflare.com/api/render-video';
 
+        async function sendToFfmpegRenderer(finalVideoScript) {
+            // Pointing directly to your newly configured secure Hetzner domain
+            const SERVER_URL = 'https://api.jasonryean.pro/api/render-video';
 
-
-
-
-
-    console.log("Sending script to rendering engine...", finalVideoScript);
+            console.log("Sending script to rendering engine...", finalVideoScript);
 
             try {
-        const response = await fetch(SERVER_URL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(finalVideoScript) 
-        });
+                const response = await fetch(SERVER_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(finalVideoScript) 
+                });
 
+                const data = await response.json();
 
+                if (response.ok) {
+                    console.log("✅ Render Success!", data.message);
+                    alert("Video is rendering on the server!");
+                } else {
+                    console.error("❌ Render Failed:", data.error);
+                    alert("Server Error: " + data.error);
+                }
 
-        const data = await response.json();
-
-        if (response.ok) {
-            console.log("✅ Render Success!", data.message);
-            alert("Video is rendering on the server!");
-            // You can also update your UI here to show a success state
-        } else {
-            console.error("❌ Render Failed:", data.error);
-            alert("Server Error: " + data.error);
+            } catch (error) {
+                console.error("Network Error:", error);
+                alert("Failed to connect to the Hetzner server. Is it running?");
+            }
         }
 
-    } catch (error) {
-        console.error("Network Error:", error);
-        alert("Failed to connect to the Hetzner server. Is it running?");
-    }
-}
+        // ==========================================
+        // TEST TRIGGER: Send data to Hetzner
+        // ==========================================
+        document.getElementById('testRenderBtn').addEventListener('click', async () => {
+            
+            // Fake AI output to test your video pipeline
+            const testPayload = {
+                b_roll_query: "business desk",
+                text_cards: [
+                    "Card 1: Stop managing workflows manually.",
+                    "Card 2: It costs you hours.",
+                    "Card 3: Automate your systems.",
+                    "Card 4: Build a custom portal.",
+                    "Card 5: Start today."
+                ]
+            };
 
-// ==========================================
-// TEST TRIGGER: Send data to Hetzner
-// ==========================================
-// Note: You will need to add a button with id="testRenderBtn" to your HTML file!
-document.getElementById('testRenderBtn').addEventListener('click', async () => {
-    
-    // This is a fake AI output to test your video pipeline
-    const testPayload = {
-        b_roll_query: "business desk",
-        text_cards: [
-            "Card 1: Stop managing workflows manually.",
-            "Card 2: It costs you hours.",
-            "Card 3: Automate your systems.",
-            "Card 4: Build a custom portal.",
-            "Card 5: Start today."
-        ]
-    };
-
-    console.log("Button clicked! Firing payload to Hetzner...");
-    await sendToFfmpegRenderer(testPayload);
-});
-
+            console.log("Button clicked! Firing payload to Hetzner...");
+            await sendToFfmpegRenderer(testPayload);
+        });
 
     </script>
 </body>
