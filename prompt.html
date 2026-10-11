@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Configuration Portal</title>
+    <!-- Tailwind CSS for styling matching your other portal -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Supabase JS Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="bg-[#0F172A] text-white font-sans min-h-screen p-4 flex flex-col items-center pt-12">
+
+    <div class="w-full max-w-md">
+        <!-- Header -->
+        <h1 class="text-2xl font-bold mb-1">AI Configuration Portal</h1>
+        <p class="text-slate-400 text-sm mb-6">Manage AI copywriting rules and guardrails.</p>
+
+        <!-- Main Card -->
+        <div class="bg-[#1E293B] border border-slate-700 rounded-2xl p-5 shadow-xl">
+            <label class="block text-sm font-semibold mb-3 text-slate-200">System Prompt & Rules</label>
+            
+            <!-- Text Input Area -->
+            <textarea id="promptText" 
+                class="w-full h-80 bg-black text-slate-300 border border-slate-700 rounded-xl p-4 text-sm focus:outline-none focus:border-[#0D9488] resize-none" 
+                placeholder="Paste your critical copywriting rules and card structure here..."></textarea>
+
+            <!-- Save Button (Matches your Teal Approve Button) -->
+            <button id="saveBtn" 
+                class="w-full mt-5 bg-[#0D9488] hover:bg-teal-500 text-white font-bold py-3 px-4 rounded-xl transition duration-200">
+                Save Guardrails
+            </button>
+            
+            <!-- Success Message -->
+            <p id="statusMsg" class="text-center text-sm text-teal-400 mt-3 hidden">Rules securely updated!</p>
+        </div>
+    </div>
+
+    <script>
+        // 1. Initialize your Supabase connection
+        const supabaseUrl = 'YOUR_SUPABASE_URL';
+        const supabaseKey = 'YOUR_SUPABASE_ANON_KEY';
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+        const saveBtn = document.getElementById('saveBtn');
+        const promptText = document.getElementById('promptText');
+        const statusMsg = document.getElementById('statusMsg');
+
+        // 2. Fetch the existing rules when the portal loads
+        async function loadExistingRules() {
+            const { data, error } = await supabase
+                .from('prompt_portal') // Change to your actual table name
+                .select('copywriting_rules')
+                .single();
+            
+            if (data && data.copywriting_rules) {
+                promptText.value = data.copywriting_rules;
+            }
+        }
+        loadExistingRules();
+
+        // 3. Save the new rules when the button is clicked
+        saveBtn.addEventListener('click', async () => {
+            saveBtn.innerText = 'Saving...';
+            
+            const { error } = await supabase
+                .from('prompt_portal') // Change to your actual table name
+                .update({ copywriting_rules: promptText.value })
+                .eq('id', 1); // Assuming you keep your rules in row ID 1
+
+            saveBtn.innerText = 'Save Guardrails';
+            
+            if (!error) {
+                statusMsg.classList.remove('hidden');
+                setTimeout(() => statusMsg.classList.add('hidden'), 3000);
+            } else {
+                alert('Error saving rules: ' + error.message);
+            }
+        });
+    </script>
+</body>
+</html>
