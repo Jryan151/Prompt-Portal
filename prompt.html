@@ -158,6 +158,10 @@
 
     </div>
 
+⁠<button id="testRenderBtn" style="padding: 10px; background: red; color: white; margin: 20px; cursor: pointer;">TEST SERVER RENDER</button>⁠
+
+
+
     <!-- UI Logic & State Management -->
     <script>
         const state = {
@@ -309,6 +313,61 @@
             console.log("Saving to Database:", jsonPayload);
             alert("Configuration Saved! Check console to see JSON payload.");
         });
+async function sendToFfmpegRenderer(finalVideoScript) {
+    // We are pointing this directly to your Hetzner server IP and Port 3000
+    const SERVER_URL = 'http://46.224.101.104:3000/api/render-video';
+
+    console.log("Sending script to rendering engine...", finalVideoScript);
+
+    try {
+        const response = await fetch(SERVER_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            // Convert your JavaScript object into a JSON string for the trip
+            body: JSON.stringify(finalVideoScript) 
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            console.log("✅ Render Success!", data.message);
+            alert("Video is rendering on the server!");
+            // You can also update your UI here to show a success state
+        } else {
+            console.error("❌ Render Failed:", data.error);
+            alert("Server Error: " + data.error);
+        }
+
+    } catch (error) {
+        console.error("Network Error:", error);
+        alert("Failed to connect to the Hetzner server. Is it running?");
+    }
+}
+
+// ==========================================
+// TEST TRIGGER: Send data to Hetzner
+// ==========================================
+// Note: You will need to add a button with id="testRenderBtn" to your HTML file!
+document.getElementById('testRenderBtn').addEventListener('click', async () => {
+    
+    // This is a fake AI output to test your video pipeline
+    const testPayload = {
+        b_roll_query: "business desk",
+        text_cards: [
+            "Card 1: Stop managing workflows manually.",
+            "Card 2: It costs you hours.",
+            "Card 3: Automate your systems.",
+            "Card 4: Build a custom portal.",
+            "Card 5: Start today."
+        ]
+    };
+
+    console.log("Button clicked! Firing payload to Hetzner...");
+    await sendToFfmpegRenderer(testPayload);
+});
+
 
     </script>
 </body>
