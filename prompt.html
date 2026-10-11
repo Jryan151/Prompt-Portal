@@ -315,19 +315,22 @@
         });
 async function sendToFfmpegRenderer(finalVideoScript) {
     // We are pointing this directly to your Hetzner server IP and Port 3000
-    const SERVER_URL = 'https://clean-worlds-attend.loca.lt';
+    const SERVER_URL = 'https://clean-worlds-attend.loca.lt/api/render-video';
+
+
 
     console.log("Sending script to rendering engine...", finalVideoScript);
 
-    try {
+        try {
         const response = await fetch(SERVER_URL, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Bypass-Tunnel-Reminder': 'true'
             },
-            // Convert your JavaScript object into a JSON string for the trip
             body: JSON.stringify(finalVideoScript) 
         });
+
 
         const data = await response.json();
 
