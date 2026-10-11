@@ -6,191 +6,166 @@
     <title>AI Configuration Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Custom scrollbar for textareas */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #0F172A; }
         ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #475569; }
-        .hidden-tab { display: none; }
     </style>
 </head>
-<body class="bg-[#0F172A] text-slate-200 font-sans min-h-screen flex justify-center p-6">
+<body class="bg-[#0F172A] text-slate-200 font-sans min-h-screen p-4 md:p-8 flex flex-col items-center">
 
-    <div class="w-full max-w-5xl bg-[#1E293B] border border-slate-700 rounded-2xl shadow-2xl flex flex-col overflow-hidden">
-        
-        <!-- Header -->
-        <div class="p-6 border-b border-slate-700 bg-[#1e293b]">
-            <div class="flex justify-between items-center">
-                <div>
-                    <h1 class="text-2xl font-bold text-white">AI Configuration Portal</h1>
-                    <p class="text-slate-400 text-sm mt-1">Manage prompt architecture, guardrails, and persona.</p>
-                </div>
-                <div class="flex gap-3">
-                    <button id="loadConfigBtn" class="bg-slate-700 hover:bg-slate-600 text-white font-medium py-2 px-4 rounded-lg text-sm transition">Load Template</button>
-                    <button id="saveConfigBtn" class="bg-[#0D9488] hover:bg-teal-500 text-white font-bold py-2 px-4 rounded-lg text-sm transition">Save to Library</button>
-                </div>
-            </div>
-        </div>
+    <!-- Symmetrical Header -->
+    <div class="w-full max-w-3xl text-center mb-8 mt-4">
+        <h1 class="text-3xl font-bold text-white tracking-wide">AI Configuration Portal</h1>
+        <p class="text-slate-400 text-sm mt-2">Manage prompt architecture, guardrails, and persona.</p>
+    </div>
 
-        <!-- Tab Navigation -->
-        <div class="flex border-b border-slate-700 px-6 bg-slate-900/50">
-            <button class="tab-btn px-4 py-3 text-sm font-semibold text-teal-400 border-b-2 border-teal-400" data-target="tab-strategy">1. Strategy & Audience</button>
-            <button class="tab-btn px-4 py-3 text-sm font-semibold text-slate-400 hover:text-slate-200 border-b-2 border-transparent transition" data-target="tab-persona">2. Persona & Beliefs</button>
-            <button class="tab-btn px-4 py-3 text-sm font-semibold text-slate-400 hover:text-slate-200 border-b-2 border-transparent transition" data-target="tab-rules">3. Guardrails & Rules</button>
-            <button class="tab-btn px-4 py-3 text-sm font-semibold text-slate-400 hover:text-slate-200 border-b-2 border-transparent transition" data-target="tab-output">4. Final Assembly</button>
-        </div>
+    <!-- Pill-Style Tabs (Matching Food Truck UI) -->
+    <div class="w-full max-w-3xl flex justify-center flex-wrap gap-3 mb-6">
+        <button class="tab-btn px-6 py-2.5 text-sm font-bold rounded-full bg-white text-black transition" data-target="tab-strategy">Strategy & Audience</button>
+        <button class="tab-btn px-6 py-2.5 text-sm font-bold rounded-full bg-[#1E293B] text-slate-400 border border-slate-700 hover:bg-slate-800 transition" data-target="tab-persona">Persona & Beliefs</button>
+        <button class="tab-btn px-6 py-2.5 text-sm font-bold rounded-full bg-[#1E293B] text-slate-400 border border-slate-700 hover:bg-slate-800 transition" data-target="tab-rules">Guardrails & Rules</button>
+    </div>
 
-        <!-- Content Area -->
-        <div class="p-6 flex-1 overflow-y-auto">
+    <!-- Main Content Card -->
+    <div class="w-full max-w-3xl bg-[#1E293B] border border-slate-700 rounded-3xl shadow-2xl p-6 md:p-8 mb-12">
 
-            <!-- TAB 1: STRATEGY & AUDIENCE -->
-            <div id="tab-strategy" class="tab-content space-y-6">
-                <!-- Framework Selector -->
-                <div>
+        <!-- TAB 1: STRATEGY & AUDIENCE -->
+        <div id="tab-strategy" class="tab-content space-y-6">
+            
+            <!-- Framework Row & Action Buttons -->
+            <div class="flex items-end gap-3">
+                <div class="flex-1">
                     <label class="block text-sm font-semibold mb-2 text-slate-300">Framework Presets</label>
-                    <select id="frameworkSelect" class="w-full bg-black border border-slate-700 rounded-lg p-3 text-sm text-white focus:outline-none focus:border-teal-500">
+                    <select id="frameworkSelect" class="w-full bg-black border border-slate-700 rounded-xl p-2.5 text-sm text-white focus:outline-none focus:border-teal-500">
                         <option value="PAS">Problem-Agitate-Solution (PAS)</option>
                         <option value="AIDA">Attention-Interest-Desire-Action (AIDA)</option>
                         <option value="Direct">Cutthroat Direct Response</option>
                         <option value="Story">Narrative Storytelling</option>
                     </select>
                 </div>
+                <button id="loadConfigBtn" class="bg-slate-700 hover:bg-slate-600 text-white font-semibold py-2.5 px-4 rounded-xl text-sm transition">Load</button>
+                <button id="saveConfigBtn" class="bg-[#0D9488] hover:bg-teal-500 text-white font-semibold py-2.5 px-4 rounded-xl text-sm transition">Save</button>
+            </div>
 
-                <!-- Target Audience Input -->
-                <div>
-                    <label class="block text-sm font-semibold mb-2 text-slate-300">Target Audience Profiles</label>
-                    <div class="bg-black border border-slate-700 rounded-lg p-2 min-h-[50px] flex flex-wrap gap-2 focus-within:border-teal-500" id="audienceContainer">
-                        <input type="text" id="audienceInput" class="bg-transparent text-sm text-white outline-none flex-1 min-w-[150px] p-1" placeholder="Type and press Enter (e.g. 'older people')">
-                    </div>
-                </div>
-
-                <!-- Pain Point Manager -->
-                <div>
-                    <label class="block text-sm font-semibold mb-2 text-slate-300">Customer Pain Points to Agitate</label>
-                    <div class="bg-black border border-slate-700 rounded-lg p-2 min-h-[50px] flex flex-wrap gap-2 focus-within:border-teal-500" id="painContainer">
-                        <input type="text" id="painInput" class="bg-transparent text-sm text-white outline-none flex-1 min-w-[150px] p-1" placeholder="Type and press Enter...">
-                    </div>
+            <!-- Target Audience Input -->
+            <div>
+                <label class="block text-sm font-semibold mb-2 text-slate-300">Target Audience Profiles</label>
+                <div class="bg-black border border-slate-700 rounded-xl p-2 min-h-[50px] flex flex-wrap gap-2 focus-within:border-teal-500" id="audienceContainer">
+                    <input type="text" id="audienceInput" class="bg-transparent text-sm text-white outline-none flex-1 min-w-[150px] p-1" placeholder="Type and press Enter (e.g. 'older people')">
                 </div>
             </div>
 
-            <!-- TAB 2: PERSONA & BELIEFS -->
-            <div id="tab-persona" class="tab-content hidden-tab space-y-6">
-                <!-- Persona Controls (Sliders) -->
-                <div class="grid grid-cols-2 gap-8">
-                    <div>
-                        <label class="flex justify-between text-sm font-semibold mb-2 text-slate-300">
-                            <span>Energy Level</span>
-                            <span id="energyLabel" class="text-teal-400">Neutral (5)</span>
-                        </label>
-                        <input type="range" id="energySlider" min="1" max="10" value="5" class="w-full accent-teal-500">
-                        <div class="flex justify-between text-xs text-slate-500 mt-1">
-                            <span>Calm</span><span>High Energy</span>
-                        </div>
-                    </div>
-                    <div>
-                        <label class="flex justify-between text-sm font-semibold mb-2 text-slate-300">
-                            <span>Tone</span>
-                            <span id="toneLabel" class="text-teal-400">Balanced (5)</span>
-                        </label>
-                        <input type="range" id="toneSlider" min="1" max="10" value="5" class="w-full accent-teal-500">
-                        <div class="flex justify-between text-xs text-slate-500 mt-1">
-                            <span>Relatable</span><span>Authoritative</span>
-                        </div>
-                    </div>
-                </div>
-
-                <hr class="border-slate-700">
-
-                <!-- Editable Core Beliefs Checkboxes -->
-                <div>
-                    <label class="block text-sm font-semibold mb-2 text-slate-300">Core Beliefs (Inject Brand Values)</label>
-                    <div class="flex gap-2 mb-3">
-                        <input type="text" id="newBeliefInput" class="flex-1 bg-black border border-slate-700 rounded-lg p-2 text-sm text-white focus:outline-none focus:border-teal-500" placeholder="Add a new core belief (e.g. 'Precision over Speed')">
-                        <button id="addBeliefBtn" class="bg-slate-700 hover:bg-slate-600 text-white px-4 py-2 rounded-lg text-sm font-bold transition">+</button>
-                    </div>
-                    <div id="beliefsList" class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        <!-- Dynamically populated via JS -->
-                    </div>
+            <!-- Pain Point Manager -->
+            <div>
+                <label class="block text-sm font-semibold mb-2 text-slate-300">Customer Pain Points to Agitate</label>
+                <div class="bg-black border border-slate-700 rounded-xl p-2 min-h-[50px] flex flex-wrap gap-2 focus-within:border-teal-500" id="painContainer">
+                    <input type="text" id="painInput" class="bg-transparent text-sm text-white outline-none flex-1 min-w-[150px] p-1" placeholder="Type and press Enter...">
                 </div>
             </div>
 
-            <!-- TAB 3: GUARDRAILS & RULES -->
-            <div id="tab-rules" class="tab-content hidden-tab space-y-6">
-                <!-- Solution Delivery Format -->
-                <div>
-                    <label class="block text-sm font-semibold mb-2 text-slate-300">Solution Delivery Format</label>
-                    <div class="flex gap-4">
-                        <label class="flex items-center gap-2 cursor-pointer bg-black px-4 py-2 border border-slate-700 rounded-lg">
-                            <input type="radio" name="formatToggle" value="Storytelling" class="accent-teal-500" checked>
-                            <span class="text-sm">Storytelling</span>
-                        </label>
-                        <label class="flex items-center gap-2 cursor-pointer bg-black px-4 py-2 border border-slate-700 rounded-lg">
-                            <input type="radio" name="formatToggle" value="Step-by-step Lists" class="accent-teal-500">
-                            <span class="text-sm">Step-by-step Lists</span>
-                        </label>
-                    </div>
-                </div>
-
-                <hr class="border-slate-700">
-
-                <!-- Vocabulary Guardrails -->
-                <div class="grid grid-cols-2 gap-6">
-                    <div>
-                        <label class="block text-sm font-semibold mb-2 text-slate-300">Vocabulary: Must Use</label>
-                        <div class="bg-black border border-slate-700 rounded-lg p-2 min-h-[80px] flex flex-wrap gap-2" id="vocabUseContainer">
-                            <input type="text" id="vocabUseInput" class="bg-transparent text-sm text-white outline-none flex-1 min-w-[100px] p-1" placeholder="Add phrase...">
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-semibold mb-2 text-slate-300">Vocabulary: Strictly Avoid</label>
-                        <div class="bg-black border border-slate-700 rounded-lg p-2 min-h-[80px] flex flex-wrap gap-2" id="vocabAvoidContainer">
-                            <input type="text" id="vocabAvoidInput" class="bg-transparent text-sm text-white outline-none flex-1 min-w-[100px] p-1" placeholder="Add phrase...">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Constraint Guardrails (Pill UI) -->
-                <div class="grid grid-cols-2 gap-6">
-                    <div>
-                        <label class="block text-sm font-semibold mb-2 text-slate-300">Constraint Rules: Must Do</label>
-                        <div class="bg-black border border-slate-700 rounded-lg p-2 min-h-[80px] flex flex-wrap gap-2" id="ruleDoContainer">
-                            <input type="text" id="ruleDoInput" class="bg-transparent text-sm text-white outline-none flex-1 min-w-[100px] p-1" placeholder="Add positive rule...">
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-semibold mb-2 text-slate-300">Constraint Rules: Strictly Avoid</label>
-                        <div class="bg-black border border-slate-700 rounded-lg p-2 min-h-[80px] flex flex-wrap gap-2" id="ruleAvoidContainer">
-                            <input type="text" id="ruleAvoidInput" class="bg-transparent text-sm text-white outline-none flex-1 min-w-[100px] p-1" placeholder="Add negative rule...">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- CTA Builder -->
-                <div>
-                    <label class="block text-sm font-semibold mb-2 text-slate-300">Call-To-Action (CTA) Instructions</label>
-                    <textarea id="ctaInput" class="w-full h-20 bg-black text-slate-200 border border-slate-700 rounded-lg p-3 text-sm focus:outline-none focus:border-teal-500 resize-none" placeholder="Define exact closing conversion instructions..."></textarea>
-                </div>
+            <!-- Solution Prompt Area -->
+            <div>
+                <label class="block text-sm font-semibold mb-2 text-slate-300">Solution Prompt</label>
+                <textarea id="solutionInput" class="w-full h-24 bg-black text-slate-200 border border-slate-700 rounded-xl p-3 text-sm focus:outline-none focus:border-teal-500 resize-none" placeholder="Describe the solution delivery, core offer, or value proposition..."></textarea>
             </div>
 
-            <!-- TAB 4: OUTPUT & ASSEMBLY -->
-            <div id="tab-output" class="tab-content hidden-tab h-full flex flex-col">
-                <div class="mb-2 flex justify-between items-end">
-                    <label class="block text-sm font-semibold text-slate-300">Compiled System Prompt Skeleton</label>
-                    <span class="text-xs text-teal-400">Auto-updates on change</span>
-                </div>
-                <textarea id="finalPromptOutput" readonly class="w-full flex-1 min-h-[400px] bg-black text-slate-300 border border-slate-700 rounded-lg p-4 text-sm font-mono focus:outline-none resize-none leading-relaxed"></textarea>
+            <!-- CTA Builder -->
+            <div>
+                <label class="block text-sm font-semibold mb-2 text-slate-300">Call-To-Action (CTA) Instructions</label>
+                <textarea id="ctaInput" class="w-full h-20 bg-black text-slate-200 border border-slate-700 rounded-xl p-3 text-sm focus:outline-none focus:border-teal-500 resize-none" placeholder="Define exact closing conversion instructions..."></textarea>
             </div>
-
         </div>
+
+        <!-- TAB 2: PERSONA & BELIEFS -->
+        <div id="tab-persona" class="tab-content hidden space-y-6">
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                    <label class="flex justify-between text-sm font-semibold mb-2 text-slate-300">
+                        <span>Energy Level</span>
+                        <span id="energyLabel" class="text-teal-400">Neutral (5)</span>
+                    </label>
+                    <input type="range" id="energySlider" min="1" max="10" value="5" class="w-full accent-teal-500">
+                    <div class="flex justify-between text-xs text-slate-500 mt-1">
+                        <span>Calm</span><span>High Energy</span>
+                    </div>
+                </div>
+                <div>
+                    <label class="flex justify-between text-sm font-semibold mb-2 text-slate-300">
+                        <span>Tone</span>
+                        <span id="toneLabel" class="text-teal-400">Balanced (5)</span>
+                    </label>
+                    <input type="range" id="toneSlider" min="1" max="10" value="5" class="w-full accent-teal-500">
+                    <div class="flex justify-between text-xs text-slate-500 mt-1">
+                        <span>Relatable</span><span>Authoritative</span>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="border-slate-700">
+
+            <!-- Editable Core Beliefs -->
+            <div>
+                <label class="block text-sm font-semibold mb-2 text-slate-300">Core Beliefs (Inject Brand Values)</label>
+                <div class="flex gap-2 mb-3">
+                    <input type="text" id="newBeliefInput" class="flex-1 bg-black border border-slate-700 rounded-xl p-2 text-sm text-white focus:outline-none focus:border-teal-500" placeholder="Add a new core belief (e.g. 'Precision over Speed')">
+                    <button id="addBeliefBtn" class="bg-slate-700 hover:bg-slate-600 text-white px-4 py-2 rounded-xl text-sm font-bold transition">+</button>
+                </div>
+                <div id="beliefsList" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <!-- Dynamically populated via JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: GUARDRAILS & RULES -->
+        <div id="tab-rules" class="tab-content hidden space-y-6">
+            
+            <!-- Vocabulary Guardrails -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-semibold mb-2 text-slate-300">Vocabulary: Must Use</label>
+                    <div class="bg-black border border-slate-700 rounded-xl p-2 min-h-[80px] flex flex-wrap gap-2" id="vocabUseContainer">
+                        <input type="text" id="vocabUseInput" class="bg-transparent text-sm text-white outline-none flex-1 min-w-[100px] p-1" placeholder="Add phrase...">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold mb-2 text-slate-300">Vocabulary: Strictly Avoid</label>
+                    <div class="bg-black border border-slate-700 rounded-xl p-2 min-h-[80px] flex flex-wrap gap-2" id="vocabAvoidContainer">
+                        <input type="text" id="vocabAvoidInput" class="bg-transparent text-sm text-white outline-none flex-1 min-w-[100px] p-1" placeholder="Add phrase...">
+                    </div>
+                </div>
+            </div>
+
+            <hr class="border-slate-700">
+
+            <!-- Constraint Guardrails -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-semibold mb-2 text-slate-300">Constraint Rules: Must Do</label>
+                    <div class="bg-black border border-slate-700 rounded-xl p-2 min-h-[80px] flex flex-wrap gap-2" id="ruleDoContainer">
+                        <input type="text" id="ruleDoInput" class="bg-transparent text-sm text-white outline-none flex-1 min-w-[100px] p-1" placeholder="Add positive rule...">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold mb-2 text-slate-300">Constraint Rules: Strictly Avoid</label>
+                    <div class="bg-black border border-slate-700 rounded-xl p-2 min-h-[80px] flex flex-wrap gap-2" id="ruleAvoidContainer">
+                        <input type="text" id="ruleAvoidInput" class="bg-transparent text-sm text-white outline-none flex-1 min-w-[100px] p-1" placeholder="Add negative rule...">
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <!-- UI Logic & State Management -->
     <script>
-        // State Object
         const state = {
             framework: 'PAS',
             audience: [],
             painPoints: [],
+            solution: "",
+            cta: "",
             energy: 5,
             tone: 5,
             beliefs: [
@@ -198,12 +173,10 @@
                 { text: "Precision over Speed", active: true },
                 { text: "Nurturing Approach", active: false }
             ],
-            format: 'Storytelling',
             vocabUse: [],
             vocabAvoid: [],
             rulesDo: [],
-            rulesAvoid: [],
-            cta: ""
+            rulesAvoid: []
         };
 
         // --- Tab Navigation ---
@@ -211,21 +184,20 @@
             btn.addEventListener('click', () => {
                 // Remove active styling from all
                 document.querySelectorAll('.tab-btn').forEach(b => {
-                    b.classList.remove('text-teal-400', 'border-teal-400');
-                    b.classList.add('text-slate-400', 'border-transparent');
+                    b.classList.remove('bg-white', 'text-black');
+                    b.classList.add('bg-[#1E293B]', 'text-slate-400', 'border', 'border-slate-700');
                 });
                 // Add active styling to clicked
-                btn.classList.remove('text-slate-400', 'border-transparent');
-                btn.classList.add('text-teal-400', 'border-teal-400');
+                btn.classList.add('bg-white', 'text-black');
+                btn.classList.remove('bg-[#1E293B]', 'text-slate-400', 'border', 'border-slate-700');
                 
-                // Hide all content
-                document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden-tab'));
-                // Show target content
-                document.getElementById(btn.dataset.target).classList.remove('hidden-tab');
+                // Toggle content
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+                document.getElementById(btn.dataset.target).classList.remove('hidden');
             });
         });
 
-        // --- Tag Input Generator (Pill UI) ---
+        // --- Tag Input Generator ---
         function setupTagInput(inputId, containerId, stateArrayKey) {
             const input = document.getElementById(inputId);
             const container = document.getElementById(containerId);
@@ -236,22 +208,19 @@
                     state[stateArrayKey].push(input.value.trim());
                     input.value = '';
                     renderTags(container, state[stateArrayKey], stateArrayKey);
-                    updatePromptEngine();
                 }
             });
         }
 
         function renderTags(container, array, stateArrayKey) {
-            // Remove existing tags
             Array.from(container.querySelectorAll('.pill-tag')).forEach(el => el.remove());
             
-            // Rebuild tags
             array.forEach((text, index) => {
                 const tag = document.createElement('div');
-                tag.className = 'pill-tag bg-slate-800 border border-slate-600 text-xs px-2 py-1 rounded-full flex items-center gap-2 text-slate-200';
+                tag.className = 'pill-tag bg-slate-800 border border-slate-600 text-xs px-3 py-1.5 rounded-full flex items-center gap-2 text-slate-200';
                 tag.innerHTML = `
                     ${text}
-                    <button class="text-slate-400 hover:text-red-400 focus:outline-none" onclick="removeTag('${stateArrayKey}', ${index}, '${container.id}')">✕</button>
+                    <button class="text-slate-400 hover:text-red-400 focus:outline-none font-bold" onclick="removeTag('${stateArrayKey}', ${index}, '${container.id}')">✕</button>
                 `;
                 container.insertBefore(tag, container.lastElementChild);
             });
@@ -260,10 +229,8 @@
         window.removeTag = function(stateArrayKey, index, containerId) {
             state[stateArrayKey].splice(index, 1);
             renderTags(document.getElementById(containerId), state[stateArrayKey], stateArrayKey);
-            updatePromptEngine();
         };
 
-        // Initialize Tag Inputs
         setupTagInput('audienceInput', 'audienceContainer', 'audience');
         setupTagInput('painInput', 'painContainer', 'painPoints');
         setupTagInput('vocabUseInput', 'vocabUseContainer', 'vocabUse');
@@ -280,10 +247,10 @@
             beliefsList.innerHTML = '';
             state.beliefs.forEach((belief, index) => {
                 const div = document.createElement('div');
-                div.className = 'flex items-center justify-between bg-black p-3 rounded-lg border border-slate-700';
+                div.className = 'flex items-center justify-between bg-black p-3 rounded-xl border border-slate-700';
                 div.innerHTML = `
                     <label class="flex items-center gap-3 cursor-pointer flex-1">
-                        <input type="checkbox" class="w-4 h-4 accent-teal-500" ${belief.active ? 'checked' : ''} onchange="toggleBelief(${index}, this.checked)">
+                        <input type="checkbox" class="w-4 h-4 accent-teal-500 rounded" ${belief.active ? 'checked' : ''} onchange="toggleBelief(${index}, this.checked)">
                         <span class="text-sm ${belief.active ? 'text-white' : 'text-slate-500'}">${belief.text}</span>
                     </label>
                     <button class="text-slate-500 hover:text-red-400 px-2" onclick="deleteBelief(${index})">✕</button>
@@ -294,14 +261,12 @@
 
         window.toggleBelief = function(index, isChecked) {
             state.beliefs[index].active = isChecked;
-            renderBeliefs(); // re-render to update text color
-            updatePromptEngine();
+            renderBeliefs();
         };
 
         window.deleteBelief = function(index) {
             state.beliefs.splice(index, 1);
             renderBeliefs();
-            updatePromptEngine();
         };
 
         function addNewBelief() {
@@ -310,7 +275,6 @@
                 state.beliefs.push({ text: val, active: true });
                 newBeliefInput.value = '';
                 renderBeliefs();
-                updatePromptEngine();
             }
         }
         
@@ -319,86 +283,33 @@
             if (e.key === 'Enter') addNewBelief();
         });
 
-        renderBeliefs(); // Initial load
+        renderBeliefs();
 
-        // --- Standard Inputs Listeners ---
-        document.getElementById('frameworkSelect').addEventListener('change', (e) => {
-            state.framework = e.target.value; updatePromptEngine();
-        });
-
+        // --- Sliders ---
         document.getElementById('energySlider').addEventListener('input', (e) => {
             state.energy = e.target.value;
             let label = e.target.value < 4 ? "Calm" : e.target.value > 7 ? "High Energy" : "Neutral";
             document.getElementById('energyLabel').innerText = `${label} (${e.target.value})`;
-            updatePromptEngine();
         });
 
         document.getElementById('toneSlider').addEventListener('input', (e) => {
             state.tone = e.target.value;
             let label = e.target.value < 4 ? "Relatable" : e.target.value > 7 ? "Authoritative" : "Balanced";
             document.getElementById('toneLabel').innerText = `${label} (${e.target.value})`;
-            updatePromptEngine();
         });
 
-        document.querySelectorAll('input[name="formatToggle"]').forEach(radio => {
-            radio.addEventListener('change', (e) => {
-                state.format = e.target.value; updatePromptEngine();
-            });
-        });
-
-        document.getElementById('ctaInput').addEventListener('input', (e) => {
-            state.cta = e.target.value; updatePromptEngine();
-        });
-
-
-        // --- Prompt Assembly Engine ---
-        function updatePromptEngine() {
-            const output = document.getElementById('finalPromptOutput');
-            
-            const activeBeliefs = state.beliefs.filter(b => b.active).map(b => b.text);
-            
-            // Build the string dynamically
-            let prompt = `You are a professional copywriter operating under the following framework: ${state.framework}.\n\n`;
-            
-            prompt += `[AUDIENCE & FOCUS]\n`;
-            prompt += `- Target Profiles: ${state.audience.length > 0 ? state.audience.join(', ') : 'None defined'}\n`;
-            prompt += `- Agitate Pain Points: ${state.painPoints.length > 0 ? state.painPoints.join(', ') : 'None defined'}\n\n`;
-            
-            prompt += `[PERSONA DIRECTIVES]\n`;
-            prompt += `- Energy Level: ${state.energy}/10\n`;
-            prompt += `- Tone: ${state.tone}/10 (1=Relatable, 10=Authoritative)\n`;
-            if (activeBeliefs.length > 0) {
-                prompt += `- Core Brand Beliefs to Inject: ${activeBeliefs.join(' | ')}\n`;
-            }
-            prompt += `\n`;
-
-            prompt += `[STRUCTURAL FORMAT]\n`;
-            prompt += `- Delivery Style: ${state.format}\n`;
-            if (state.cta) prompt += `- Call to Action: ${state.cta}\n`;
-            prompt += `\n`;
-
-            if (state.vocabUse.length > 0 || state.vocabAvoid.length > 0 || state.rulesDo.length > 0 || state.rulesAvoid.length > 0) {
-                prompt += `[CRITICAL GUARDRAILS]\n`;
-                if (state.vocabUse.length > 0) prompt += `MUST USE VOCABULARY: ${state.vocabUse.join(', ')}\n`;
-                if (state.vocabAvoid.length > 0) prompt += `STRICTLY AVOID VOCABULARY: ${state.vocabAvoid.join(', ')}\n`;
-                
-                state.rulesDo.forEach((rule, i) => prompt += `RULE ${i+1} (MUST DO): ${rule}\n`);
-                state.rulesAvoid.forEach((rule, i) => prompt += `RULE ${i+1} (STRICTLY AVOID): ${rule}\n`);
-            }
-
-            output.value = prompt;
-        }
-
-        // --- Template Library (JSON Export Demo) ---
+        // --- Save Action ---
         document.getElementById('saveConfigBtn').addEventListener('click', () => {
+            // Update manual text inputs to state before saving
+            state.framework = document.getElementById('frameworkSelect').value;
+            state.solution = document.getElementById('solutionInput').value;
+            state.cta = document.getElementById('ctaInput').value;
+
             const jsonPayload = JSON.stringify(state, null, 2);
-            // In your actual app, this is where you send jsonPayload to Supabase
             console.log("Saving to Database:", jsonPayload);
-            alert("Configuration compiled to JSON. Check console to see payload.");
+            alert("Configuration Saved! Check console to see JSON payload.");
         });
 
-        // Initialize Prompt on load
-        updatePromptEngine();
     </script>
 </body>
 </html>
